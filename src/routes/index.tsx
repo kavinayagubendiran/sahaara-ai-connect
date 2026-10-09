@@ -30,7 +30,7 @@ const field = "w-full rounded-xl border border-input bg-background px-3 py-2.5 t
 function Home() {
   const { addRequest } = useStore();
   const [form, setForm] = useState(empty);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof typeof empty, string>>>({});
   const [created, setCreated] = useState<HelpRequest | null>(null);
 
   const set = (k: keyof typeof empty, v: string) => setForm((f) => ({ ...f, [k]: v }));
@@ -39,8 +39,8 @@ function Home() {
     e.preventDefault();
     const res = schema.safeParse(form);
     if (!res.success) {
-      const errs: Record<string, string> = {};
-      res.error.issues.forEach((i) => { errs[String(i.path[0])] ??= i.message; });
+      const errs: Partial<Record<keyof typeof empty, string>> = {};
+      res.error.issues.forEach((i) => { errs[i.path[0] as keyof typeof empty] ??= i.message; });
       setErrors(errs);
       return;
     }
@@ -133,7 +133,7 @@ function Home() {
   );
 }
 
-function Field({ label, error, hint, children }: { label: string; error?: string; hint?: string; children: React.ReactNode }) {
+function Field({ label, error, hint, children }: { label: string; error?: string | undefined; hint?: string; children: React.ReactNode }) {
   return (
     <label className="block">
       <span className="mb-1.5 block text-sm font-medium">{label}</span>
