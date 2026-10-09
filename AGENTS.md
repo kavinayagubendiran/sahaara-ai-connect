@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Architecture
+- App state lives in `src/lib/store.tsx` (React context + localStorage); all pages read from it so stats stay consistent. No backend for the demo.
+- Matching is rule-based (`findMatches`) and labelled "simulated AI" in the UI — keep it honest; never claim real volunteers are contacted.
